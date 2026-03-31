@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     CheckBox fractureCheck;
     Button analyzeBtn;
 
-    AutoCompleteTextView genderDropdown = findViewById(R.id.genderDropdown);
+    TextInputLayout genderLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         analyzeBtn.setOnClickListener(v -> {
 
             int selectedId = bleedingGroup.getCheckedRadioButtonId();
-
             String bleeding = "None";
 
             if (selectedId != -1) {
@@ -58,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
             boolean fracture = fractureCheck.isChecked();
             String meds = medInput.getText().toString();
 
-            // 🔥 PASTE HERE (instead of Toast)
-            Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
 
+            // 🔥 pass data
             intent.putExtra("bleeding", bleeding);
             intent.putExtra("conscious", conscious);
             intent.putExtra("fracture", fracture);
@@ -68,16 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
-
-        String[] genders = {"Male", "Female", "Other"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                genders
-        );
-
-        genderDropdown.setAdapter(adapter);
 
     }
 }
