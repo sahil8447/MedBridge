@@ -13,123 +13,150 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+
     EditText nameInput, ageInput, medInput, currentDiseaseName, previousDiseaseName;
+    AutoCompleteTextView genderDropdown, fractureDropdown;
 
     RadioGroup bleedingGroup;
     Switch consciousSwitch;
+
     CheckBox fractureCheck, CurrentDisease, PreviousDisease;
     Button analyzeBtn;
-    TextInputLayout fractureLayout;
 
-    @SuppressLint("MissingInflatedId")
-    AutoCompleteTextView genderDropdown;
+    TextInputLayout fractureLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // ✅ Initialize views
+        // 🔹 Initialize Views
         nameInput = findViewById(R.id.nameInput);
         ageInput = findViewById(R.id.ageInput);
         medInput = findViewById(R.id.medInput);
 
-        AutoCompleteTextView genderDropdown = findViewById(R.id.genderDropdown);
+        genderDropdown = findViewById(R.id.genderDropdown);
+        fractureDropdown = findViewById(R.id.fractureDropdown);
 
         bleedingGroup = findViewById(R.id.bleedingGroup);
         consciousSwitch = findViewById(R.id.consciousSwitch);
+
         fractureCheck = findViewById(R.id.fractureCheck);
-        fractureLayout=findViewById(R.id.fractureLayout);
-        CurrentDisease=findViewById(R.id.CurrentDisease);
-        currentDiseaseName =findViewById(R.id.CurrentDiseaseInput);
-        PreviousDisease=findViewById(R.id.PreviousDisease);
-        previousDiseaseName =findViewById(R.id.PreviousDiseaseInput);
-        AutoCompleteTextView fractureDropdown = findViewById(R.id.fractureDropdown);
+        fractureLayout = findViewById(R.id.fractureLayout);
+
+        CurrentDisease = findViewById(R.id.CurrentDisease);
+        currentDiseaseName = findViewById(R.id.CurrentDiseaseInput);
+
+        PreviousDisease = findViewById(R.id.PreviousDisease);
+        previousDiseaseName = findViewById(R.id.PreviousDiseaseInput);
+
         analyzeBtn = findViewById(R.id.analyzeBtn);
 
-        genderDropdown = findViewById(R.id.genderDropdown);
-
-        // ✅ Gender dropdown setup
+        // 🔹 Gender Dropdown
         String[] genders = {"Male", "Female", "Other"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_dropdown_item_1line,
                 genders
         );
+        genderDropdown.setAdapter(genderAdapter);
 
-        genderDropdown.setAdapter(adapter);
+        // 🔹 Fracture Dropdown
+        String[] fractureType = {"Hand", "Leg", "Spine", "Nose", "Bone Cracks", "Others"};
+        ArrayAdapter<String> fractureAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                fractureType
+        );
+        fractureDropdown.setAdapter(fractureAdapter);
 
-        // ✅ Button setup
-        analyzeBtn.setText("Run Triage Analysis");
+        // 🔹 Toggle visibility
+        fractureCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            fractureLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        });
 
+        CurrentDisease.setOnCheckedChangeListener((b, isChecked) -> {
+            currentDiseaseName.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        });
+
+        PreviousDisease.setOnCheckedChangeListener((b, isChecked) -> {
+            previousDiseaseName.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        });
+
+        // 🔹 Button Click
         analyzeBtn.setOnClickListener(v -> {
 
+            // ✅ Validation
+            if (nameInput.getText().toString().isEmpty() ||
+                    ageInput.getText().toString().isEmpty() ||
+                    genderDropdown.getText().toString().isEmpty()) {
+
+                Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 🔹 Bleeding
             int selectedId = bleedingGroup.getCheckedRadioButtonId();
             String bleeding = "None";
 
             if (selectedId != -1) {
-                RadioButton selectedButton = findViewById(selectedId);
-                bleeding = selectedButton.getText().toString();
+                RadioButton rb = findViewById(selectedId);
+                bleeding = rb.getText().toString();
             }
 
+            // 🔹 Other Inputs
             boolean conscious = consciousSwitch.isChecked();
             boolean fracture = fractureCheck.isChecked();
+
+            String fractureTypeValue = fracture ? fractureDropdown.getText().toString() : "None";
+            String currentDisease = CurrentDisease.isChecked() ? currentDiseaseName.getText().toString() : "None";
+            String previousDisease = PreviousDisease.isChecked() ? previousDiseaseName.getText().toString() : "None";
+
             String meds = medInput.getText().toString();
 
+            String name = nameInput.getText().toString();
+            String age = ageInput.getText().toString();
+            String gender = genderDropdown.getText().toString();
+
+            // 🔥 Generate current date
+            String date = new SimpleDateFormat("dd MMM", Locale.getDefault())
+                    .format(new Date());
+
+            // 🔹 Intent
             Intent intent = new Intent(MainActivity.this, LoadingActivity.class);
 
-            // 👉 pass data to loading screen
+            intent.putExtra("name", name);
+            intent.putExtra("age", age);
+            intent.putExtra("gender", gender);
+            intent.putExtra("date", date);
+
             intent.putExtra("bleeding", bleeding);
             intent.putExtra("conscious", conscious);
-            intent.putExtra("fracture", fracture);
+            intent.putExtra("fracture", fractureTypeValue);
+            intent.putExtra("currentDisease", currentDisease);
+            intent.putExtra("previousDisease", previousDisease);
             intent.putExtra("meds", meds);
 
             startActivity(intent);
         });
 
-        fractureCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                fractureLayout.setVisibility(View.VISIBLE);
-            }
-            else{
-                fractureLayout.setVisibility(View.GONE);}
-        });
-
-        CurrentDisease.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                currentDiseaseName.setVisibility(View.VISIBLE);
-            }
-            else{
-                currentDiseaseName.setVisibility(View.GONE);}
-        });
-        PreviousDisease.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                previousDiseaseName.setVisibility(View.VISIBLE);
-            }
-            else{
-                previousDiseaseName.setVisibility(View.GONE);}
-        });
-
-        String[] fractureType ={"Hand","Leg","Spine","Nose","Bone Cracks","Others"};
-        ArrayAdapter<String> adapter_fracture = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                fractureType
-        );
-        fractureDropdown.setAdapter(adapter_fracture);
-
         pressing_effect(analyzeBtn);
-
     }
+
+    // 🔹 Button press animation
     @SuppressLint("ClickableViewAccessibility")
-    public  void pressing_effect(View view){
+    public void pressing_effect(View view) {
         view.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -140,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                     v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
                     break;
             }
-            return false; // let the click event still fire
+            return false;
         });
     }
 }

@@ -1,17 +1,22 @@
 package com.Arsenic.medbridge;
 
 public class Patient {
-    String bleeding;
-    boolean conscious;
-    boolean fracture;
-    String meds;
-    String priority;
 
-    public Patient(String bleeding, boolean conscious, boolean fracture, String meds, String priority) {
+    public String name, gender, priority, date;
+    String age;
+    public String bleeding;
+    public boolean conscious;
+
+    public Patient(String name, String gender, String priority,
+                   String date, String age,
+                   String bleeding, boolean conscious) {
+
+        this.name = name;
+        this.gender = gender;
+        this.priority = priority;
+        this.date = date;
+        this.age = age;
         this.bleeding = bleeding;
         this.conscious = conscious;
-        this.fracture = fracture;
-        this.meds = meds;
-        this.priority = priority;
     }
 }
