@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background"
+    android:background="#F4F7FB"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -9,59 +9,87 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <!-- 🔷 HEADER -->
         <LinearLayout
             android:background="@color/primary"
-            android:padding="20dp"
-            android:orientation="vertical"
+            android:padding="24dp"
+            android:elevation="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:text="MedBridge"
-                android:textColor="#FFFFFF"
-                android:textSize="24sp"
-                android:textStyle="bold"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:text="Offline Medical Triage System"
-                android:textColor="#D0E6F6"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="50dp">
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/logo"
+                        />
+
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_marginStart="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:text="MedBridge"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:text="Offline Emergency Triage System"
+                        android:textColor="#E3F2FD"
+                        android:textSize="14sp"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <!-- 🔽 CONTENT -->
+        <!-- CONTENT -->
         <LinearLayout
             android:padding="20dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- SECTION: PATIENT INFO -->
+            <!-- 🧑‍⚕️ PATIENT INFO -->
             <TextView
                 android:text="Patient Information"
                 android:textStyle="bold"
                 android:textColor="@color/primary"
-                android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"/>
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <androidx.cardview.widget.CardView
+                app:cardCornerRadius="18dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#FFFFFF"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="#EFEDED"
-                app:cardCornerRadius="20dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:padding="16dp"
-                    android:layout_marginTop="8dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -69,6 +97,8 @@
                     <EditText
                         android:id="@+id/nameInput"
                         android:hint="Patient Name"
+                        android:background="@drawable/input_bg"
+                        android:padding="12dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -76,6 +106,8 @@
                         android:id="@+id/ageInput"
                         android:hint="Age"
                         android:inputType="number"
+                        android:background="@drawable/input_bg"
+                        android:padding="12dp"
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -84,55 +116,57 @@
                         android:id="@+id/genderLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:hint="@string/Select_Gender"
+                        android:layout_marginTop="10dp"
+                        android:hint="Select Gender"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                         <AutoCompleteTextView
                             android:id="@+id/genderDropdown"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"/>
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
-            <!-- SECTION: CONDITION -->
+            <!-- 🩺 CONDITION -->
             <TextView
                 android:text="Clinical Condition"
                 android:textStyle="bold"
                 android:textColor="@color/primary"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"
-                android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"/>
+                android:layout_width="wrap_content"/>
 
             <androidx.cardview.widget.CardView
+                app:cardCornerRadius="18dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#FFFFFF"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="#EFEDED"
-                app:cardCornerRadius="20dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:padding="16dp"
-                    android:layout_marginTop="8dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <!-- Bleeding -->
                     <TextView
                         android:text="Bleeding Level"
                         android:textStyle="bold"
+                        android:textSize="15sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <RadioGroup
                         android:id="@+id/bleedingGroup"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="6dp">
 
                         <RadioButton
                             android:id="@+id/bleedingNone"
@@ -145,26 +179,30 @@
                             android:id="@+id/bleedingMild"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mild"/>
+                            android:text="Mild"
+                            android:layout_marginStart="12dp"/>
 
                         <RadioButton
                             android:id="@+id/bleedingSevere"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Severe"/>
+                            android:text="Severe"
+                            android:layout_marginStart="12dp"/>
                     </RadioGroup>
 
+                    <!-- Conscious -->
                     <Switch
                         android:id="@+id/consciousSwitch"
                         android:text="Patient is conscious"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="14dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
+                    <!-- Fracture -->
                     <CheckBox
                         android:id="@+id/fractureCheck"
                         android:text="Fracture present"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
@@ -172,7 +210,7 @@
                         android:id="@+id/fractureLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_marginTop="8dp"
                         android:hint="Select Fracture"
                         android:visibility="gone"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
@@ -180,78 +218,78 @@
                         <AutoCompleteTextView
                             android:id="@+id/fractureDropdown"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"/>
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- Diseases -->
                     <CheckBox
                         android:id="@+id/CurrentDisease"
-                        android:text="Any Current Disease"
+                        android:text="Current Disease"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <EditText
-                        android:visibility="gone"
                         android:id="@+id/CurrentDiseaseInput"
+                        android:visibility="gone"
                         android:hint="Disease Name"
-                        android:layout_width="match_parent"
+                        android:background="@drawable/input_bg"
+                        android:padding="10dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <CheckBox
                         android:id="@+id/PreviousDisease"
-                        android:text="Any Previous Disease"
+                        android:text="Previous Disease"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                     <EditText
-                        android:visibility="gone"
                         android:id="@+id/PreviousDiseaseInput"
+                        android:visibility="gone"
                         android:hint="Disease Name"
-                        android:layout_width="match_parent"
+                        android:background="@drawable/input_bg"
+                        android:padding="10dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
-
-
-            <!-- SECTION: MEDICATION -->
+            <!-- 💊 MEDICATION -->
             <TextView
                 android:text="Medications"
-                android:layout_marginBottom="5dp"
                 android:textStyle="bold"
                 android:textColor="@color/primary"
-                android:textSize="16sp"
-                android:layout_marginTop="16dp"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <androidx.cardview.widget.CardView
+                app:cardCornerRadius="18dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#FFFFFF"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="#EFEDED"
-                app:cardCornerRadius="20dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:padding="16dp"
-                    android:layout_marginTop="8dp"
                     android:orientation="vertical"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/medInput"
                         android:hint="e.g. Aspirin, Ibuprofen"
-                        android:layout_width="match_parent"
+                        android:background="@drawable/input_bg"
+                        android:padding="12dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
-
-            <!-- CTA BUTTON -->
+            <!-- 🚀 BUTTON -->
             <Button
                 android:id="@+id/analyzeBtn"
                 android:text="Run Triage Analysis"
@@ -259,12 +297,11 @@
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:backgroundTint="@color/primary"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="26dp"
+                android:elevation="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"/>
 
-
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

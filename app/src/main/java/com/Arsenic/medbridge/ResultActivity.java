@@ -151,8 +151,10 @@ public class ResultActivity extends AppCompatActivity {
 
         // 📺 DISPLAY
         String finalOutput =
-                "Treatment Steps:\n" + stepsBuilder.toString() +
-                        "\nMedications:\n" + medsBuilder.toString();
+                "🩺 Treatment Steps:\n\n" + stepsBuilder.toString() +
+                        "\n💊 Medications:\n\n" + medsBuilder.toString();
+
+        treatmentText.setText(finalOutput);;
 
         treatmentText.setText(finalOutput);
         reasonText.setText(reasonBuilder.toString());
@@ -162,11 +164,11 @@ public class ResultActivity extends AppCompatActivity {
         priorityText.setText(priority);
 
         if (priority.equals("P1")) {
-            priorityText.setTextColor(getResources().getColor(R.color.danger));
+            priorityText.setBackgroundColor(getResources().getColor(R.color.danger));
         } else if (priority.equals("P2")) {
-            priorityText.setTextColor(getResources().getColor(R.color.warning));
+            priorityText.setBackgroundColor(getResources().getColor(R.color.warning));
         } else {
-            priorityText.setTextColor(getResources().getColor(R.color.accent));
+            priorityText.setBackgroundColor(getResources().getColor(R.color.accent));
         }
 
         // 💾 SAVE PATIENT
