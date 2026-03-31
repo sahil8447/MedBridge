@@ -2,6 +2,8 @@ package com.Arsenic.medbridge;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -16,12 +18,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 public class MainActivity extends AppCompatActivity {
     EditText nameInput, ageInput, medInput;
     RadioGroup bleedingGroup;
     Switch consciousSwitch;
     CheckBox fractureCheck;
     Button analyzeBtn;
+
+    AutoCompleteTextView genderDropdown = findViewById(R.id.genderDropdown);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,5 +68,16 @@ public class MainActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
+
+        String[] genders = {"Male", "Female", "Other"};
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                genders
+        );
+
+        genderDropdown.setAdapter(adapter);
+
     }
 }

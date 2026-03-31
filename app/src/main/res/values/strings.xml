@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MedBridge</string>
+    <string name="Select_Gender">Select Gender</string>
 </resources>

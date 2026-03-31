@@ -38,5 +38,8 @@ public class RecordsActivity extends AppCompatActivity {
         );
 
         listView.setAdapter(adapter);
+
+
+
     }
 }

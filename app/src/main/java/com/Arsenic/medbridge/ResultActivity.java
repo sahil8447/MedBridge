@@ -89,7 +89,7 @@ public class ResultActivity extends AppCompatActivity {
 
         // 🚀 NEW SYNC LOGIC → OPEN RECORDS SCREEN
         syncBtn.setOnClickListener(v -> {
-            Intent syncIntent = new Intent(ResultActivity.this, RecordsActivity.class);
+            Intent syncIntent = new Intent(ResultActivity.this, DashBoardActivity.class);
             startActivity(syncIntent);
         });
     }
