@@ -1,10 +1,7 @@
 package com.Arsenic.medbridge;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -23,17 +20,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.lang.reflect.Array;
-
 public class MainActivity extends AppCompatActivity {
-    EditText nameInput, ageInput, medInput, currentDiseaseName, previousDiseaseName;
+    EditText nameInput, ageInput, medInput;
     RadioGroup bleedingGroup;
     Switch consciousSwitch;
-    CheckBox fractureCheck, CurrentDisease, PreviousDisease;
+    CheckBox fractureCheck;
     Button analyzeBtn;
-    TextInputLayout fractureLayout;
 
-    @SuppressLint("MissingInflatedId")
+    AutoCompleteTextView genderDropdown = findViewById(R.id.genderDropdown);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -47,15 +42,7 @@ public class MainActivity extends AppCompatActivity {
         consciousSwitch = findViewById(R.id.consciousSwitch);
         fractureCheck = findViewById(R.id.fractureCheck);
         analyzeBtn = findViewById(R.id.analyzeBtn);
-        fractureLayout=findViewById(R.id.fractureLayout);
-        CurrentDisease=findViewById(R.id.CurrentDisease);
-        currentDiseaseName =findViewById(R.id.CurrentDiseaseInput);
-        PreviousDisease=findViewById(R.id.PreviousDisease);
-        previousDiseaseName =findViewById(R.id.PreviousDiseaseInput);
-
-        AutoCompleteTextView genderDropdown = findViewById(R.id.genderDropdown);
-        AutoCompleteTextView fractureDropdown = findViewById(R.id.fractureDropdown);
-
+        analyzeBtn.setText("Run Triage Analysis");
         analyzeBtn.setOnClickListener(v -> {
 
             int selectedId = bleedingGroup.getCheckedRadioButtonId();
@@ -82,30 +69,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        fractureCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                fractureLayout.setVisibility(View.VISIBLE);
-            }
-            else{
-            fractureLayout.setVisibility(View.GONE);}
-        });
-
-        CurrentDisease.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                currentDiseaseName.setVisibility(View.VISIBLE);
-            }
-            else{
-                currentDiseaseName.setVisibility(View.GONE);}
-        });
-        PreviousDisease.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                previousDiseaseName.setVisibility(View.VISIBLE);
-            }
-            else{
-                previousDiseaseName.setVisibility(View.GONE);}
-        });
-
-
         String[] genders = {"Male", "Female", "Other"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -116,33 +79,5 @@ public class MainActivity extends AppCompatActivity {
 
         genderDropdown.setAdapter(adapter);
 
-        String[] fractureType ={"Hand","Leg","Spine","Nose","Bone Cracks","Others"};
-        ArrayAdapter<String> adapter_fracture = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_dropdown_item_1line,
-                fractureType
-        );
-        fractureDropdown.setAdapter(adapter_fracture);
-
-        pressing_effect(analyzeBtn);
-
     }
-
-
-    @SuppressLint("ClickableViewAccessibility")
-    public  void pressing_effect(View view){
-        view.setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    v.animate().scaleX(0.95f).scaleY(0.95f).setDuration(100).start();
-                    break;
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_CANCEL:
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
-                    break;
-            }
-            return false; // let the click event still fire
-        });
-    }
-
 }
