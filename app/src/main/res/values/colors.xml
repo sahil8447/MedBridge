@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#0A3D62</color>      <!-- dark blue -->
+    <color name="accent">#1ABC9C</color>       <!-- teal -->
+    <color name="danger">#E74C3C</color>       <!-- red -->
+    <color name="warning">#F39C12</color>      <!-- orange -->
+    <color name="background">#F5F7FA</color>   <!-- light grey -->
+</resources>
