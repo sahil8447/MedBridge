@@ -95,11 +95,12 @@
         <Button
             android:id="@+id/syncBtn"
             android:text="Sync Records"
+            android:textSize="18sp"
             android:textColor="#FFFFFF"
-            android:backgroundTint="@color/accent"
+            android:backgroundTint="@color/primary"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="60dp"/>
 
     </LinearLayout>
 </ScrollView>

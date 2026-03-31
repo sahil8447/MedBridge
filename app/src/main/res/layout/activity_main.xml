@@ -173,7 +173,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
-                        android:hint="@string/Select_Gender"
+                        android:hint="Select Fracture"
                         android:visibility="gone"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
@@ -257,6 +257,7 @@
                 android:text="Run Triage Analysis"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
+                android:textSize="18sp"
                 android:backgroundTint="@color/primary"
                 android:layout_marginTop="24dp"
                 android:layout_width="match_parent"
