@@ -1,0 +1,746 @@
+{
+  "meta": {
+    "title": "Disaster First Aid Decision Database",
+    "version": "1.0",
+    "description": "Structured first aid database for triage based on patient age, gender, symptoms and conditions"
+  },
+
+  "intake_flow": {
+    "step_1": {
+      "id": "age",
+      "question": "What is the patient's age?",
+      "type": "number",
+      "categories": {
+        "infant": { "range": [0, 1], "label": "Infant (0–1 yr)" },
+        "child": { "range": [2, 12], "label": "Child (2–12 yrs)" },
+        "teen": { "range": [13, 17], "label": "Teen (13–17 yrs)" },
+        "adult": { "range": [18, 59], "label": "Adult (18–59 yrs)" },
+        "elderly": { "range": [60, 120], "label": "Elderly (60+ yrs)" }
+      }
+    },
+    "step_2": {
+      "id": "gender",
+      "question": "What is the patient's gender?",
+      "type": "single_select",
+      "options": ["male", "female", "other"]
+    },
+    "step_3": {
+      "id": "unconscious",
+      "question": "Is the patient unconscious?",
+      "type": "boolean",
+      "options": ["yes", "no"],
+      "priority": "critical",
+      "note": "If YES, this overrides all other conditions — see unconscious protocol immediately."
+    },
+    "step_4": {
+      "id": "bleeding",
+      "question": "Is there any bleeding?",
+      "type": "single_select",
+      "options": ["none", "mild", "moderate", "heavy"]
+    },
+    "step_5": {
+      "id": "fracture",
+      "question": "Is there a fracture?",
+      "type": "multi_select",
+      "options": ["none", "hand", "leg", "spinal"]
+    },
+    "step_6": {
+      "id": "conditions",
+      "question": "Select all other conditions present:",
+      "type": "multi_select",
+      "options": [
+        "fever",
+        "nausea",
+        "suffocation",
+        "anxiety",
+        "vomiting",
+        "severe_cold",
+        "headache",
+        "trauma",
+        "allergy",
+        "burn",
+        "carbon_monoxide",
+        "high_bp",
+        "low_bp",
+        "diabetes"
+      ]
+    }
+  },
+
+  "protocols": {
+
+    "unconscious": {
+      "id": "unconscious",
+      "label": "Unconscious Patient",
+      "priority": "CRITICAL — ACT IMMEDIATELY",
+      "steps": [
+        "Check area safety: no fire, traffic, electricity, or falling objects.",
+        "Tap both shoulders and shout: 'Are you okay?' — No movement, no response = unconscious.",
+        "IMMEDIATELY call 108 (India emergency) or send someone to call.",
+        "Tilt head back, lift chin. Look, listen, feel for breathing for 5–10 seconds.",
+        "If NOT breathing or only gasping: Start CPR immediately if trained.",
+        "If breathing normally: Check pulse at wrist (radial) or neck (carotid) for up to 10 seconds.",
+        "If NO pulse: Start CPR immediately.",
+        "If pulse present: Place in recovery position (on side), keep airway open.",
+        "Loosen tight clothing (collar, belt).",
+        "If history of heart disease: Help take aspirin (160–325 mg chewed) if not unconscious and no allergy.",
+        "Keep monitoring until emergency services arrive.",
+        "Do NOT give anything by mouth to an unconscious person.",
+        "Do NOT give painkillers directly — call for specialist help."
+      ],
+      "medicines": {
+        "note": "NO oral medicines for unconscious patients.",
+        "specialist_only": [
+          {
+            "name": "Glucose (IV or nasal)",
+            "use": "If unconscious due to very low blood sugar",
+            "admin": "IV or nasal — professional only"
+          },
+          {
+            "name": "Diazepam / Lorazepam",
+            "use": "If unconscious due to seizures",
+            "admin": "Injection — professional only"
+          },
+          {
+            "name": "Antibiotics / Antivirals",
+            "use": "If unconscious from brain infection / meningitis",
+            "admin": "IV — professional only"
+          }
+        ]
+      },
+      "emergency_action": "CALL 108 IMMEDIATELY. No food, no water, no oral medication."
+    },
+
+    "bleeding": {
+      "id": "bleeding",
+      "label": "Bleeding",
+      "levels": {
+        "mild": {
+          "label": "Mild / Low-Risk Bleeding",
+          "examples": ["Small cuts", "Scrapes", "Minor nosebleed", "Tiny gash"],
+          "steps": [
+            "Wash hands thoroughly before touching the wound.",
+            "Clean wound with clean water or saline solution.",
+            "Apply gentle pressure with clean cloth or gauze for 5–10 minutes — do not lift to check.",
+            "Once bleeding stops, cover with sterile bandage.",
+            "Watch for signs of infection: redness, swelling, or pus.",
+            "No emergency needed unless bleeding repeatedly restarts or wound was dirty."
+          ],
+          "medicines": [
+            {
+              "name": "Paracetamol (Crocin)",
+              "dose": "500–1000 mg every 4–6 hrs",
+              "price_inr": 10,
+              "use": "Pain relief"
+            },
+            {
+              "name": "Betadine antiseptic",
+              "price_inr": 30,
+              "use": "Wound cleaning/disinfection"
+            },
+            {
+              "name": "Sterile bandage / gauze",
+              "price_inr": 15,
+              "use": "Wound cover"
+            }
+          ]
+        },
+        "moderate": {
+          "label": "Moderate / Medium-Risk Bleeding",
+          "examples": ["Deep cuts", "Larger wounds", "Steady limb bleeding", "Frequent nosebleeds"],
+          "steps": [
+            "Apply firm, continuous pressure with clean cloth or gauze.",
+            "If blood soaks through, add MORE cloth on top — do NOT remove the original.",
+            "If wound is on arm or leg, raise limb above heart level to slow bleeding.",
+            "Do NOT remove dressing to check — disturbing clot restarts bleeding.",
+            "Seek urgent medical care if bleeding does not slow after 10–15 minutes.",
+            "Go to emergency room if wound is deep, wide, or very dirty."
+          ],
+          "medicines": [
+            {
+              "name": "Paracetamol (Crocin / Dolo 650)",
+              "dose": "500–650 mg every 4–6 hrs",
+              "price_inr": 12,
+              "use": "Pain relief"
+            },
+            {
+              "name": "Betadine",
+              "price_inr": 30,
+              "use": "Antiseptic"
+            },
+            {
+              "name": "Sterile gauze + crepe bandage",
+              "price_inr": 30,
+              "use": "Pressure dressing"
+            }
+          ]
+        },
+        "heavy": {
+          "label": "Heavy / Severe Bleeding — EMERGENCY",
+          "examples": ["Pulsatile / spraying blood", "Major trauma", "Deep torso wounds", "Heavy menstrual bleeding with dizziness"],
+          "steps": [
+            "CALL 108 IMMEDIATELY or send someone to call.",
+            "Lay person flat (unless breathing is difficult), keep them warm, reassure them.",
+            "Apply direct, strong pressure over bleeding site with clean cloth or towel.",
+            "If soaked, add more cloth ON TOP — keep pressing.",
+            "For major limb bleeding not stopping with pressure: apply tourniquet HIGH on limb (only if trained).",
+            "Do NOT remove embedded objects (knife, glass) — stabilize with padding and press AROUND it.",
+            "Monitor for shock: pale skin, rapid pulse, confusion."
+          ],
+          "medicines": [
+            {
+              "name": "No oral pain killers until bleeding is controlled",
+              "note": "Do not give medicines until emergency team arrives for heavy bleeding"
+            },
+            {
+              "name": "Betadine",
+              "price_inr": 30,
+              "use": "After bleeding is controlled, for antiseptic"
+            }
+          ],
+          "emergency_action": "CALL 108. Do not delay."
+        }
+      }
+    },
+
+    "fractures": {
+      "id": "fractures",
+      "label": "Fractures",
+      "general_symptoms": ["Pain", "Swelling", "Deformity at site"],
+      "general_steps": [
+        "Stop any bleeding with pressure using a clean cloth.",
+        "Apply ice wrapped in cloth for 15–20 minutes to reduce swelling.",
+        "Immobilize the area ABOVE and BELOW the fracture with splints, bandages, or slings.",
+        "Keep the person still and treat for shock if needed.",
+        "Call 108 immediately.",
+        "Monitor circulation every 15 minutes (check if fingers/toes are warm and pink).",
+        "Do NOT move the patient if head, neck, or back injury is involved."
+      ],
+      "types": {
+        "hand": {
+          "label": "Hand Fracture",
+          "steps": [
+            "Support hand in a raised sling against the body.",
+            "Pad gently and secure with broad bandages.",
+            "Avoid using the hand.",
+            "Elevate hand to minimize swelling until help arrives."
+          ]
+        },
+        "leg": {
+          "label": "Leg Fracture",
+          "steps": [
+            "Splint the injured leg to the uninjured one using triangular bandages or padding.",
+            "Immobilize the ankle and foot.",
+            "Do NOT raise the injured leg if shock is present.",
+            "Keep the person lying down and still."
+          ]
+        },
+        "spinal": {
+          "label": "Spinal Fracture",
+          "priority": "CRITICAL",
+          "steps": [
+            "Do NOT move the patient at all — spinal movement can cause permanent paralysis.",
+            "Call 108 immediately.",
+            "Keep the person lying flat and still.",
+            "Support the head and neck in current position — do not try to straighten.",
+            "If breathing stops, only then carefully open airway with jaw thrust, not head tilt.",
+            "Keep patient calm and reassured until help arrives."
+          ]
+        }
+      },
+      "medicines": [
+        {
+          "name": "Paracetamol (Crocin/Calpol)",
+          "dose": "500–1000 mg every 4–6 hrs (max 4g/day)",
+          "price_inr": 10,
+          "use": "Mild to moderate pain — safest first line"
+        },
+        {
+          "name": "Ibuprofen (Brufen/Combiflam)",
+          "dose": "400–600 mg every 6–8 hrs (max 2400 mg/day)",
+          "price_inr": 20,
+          "use": "Pain and swelling — avoid if stomach ulcers or kidney issues",
+          "warning": "Concerns with long-term use for bone healing — use short-term only"
+        },
+        {
+          "name": "Volini gel",
+          "price_inr": 50,
+          "use": "Apply topically 3x/day for local pain relief"
+        },
+        {
+          "name": "Diclofenac gel",
+          "price_inr": 30,
+          "use": "Topical anti-inflammatory"
+        }
+      ]
+    },
+
+    "conditions": {
+
+      "fever": {
+        "id": "fever",
+        "label": "Fever",
+        "definition": "Temporary rise in body temperature above 100.4°F / 38°C",
+        "symptoms": ["Chills", "Sweating", "Headache", "Muscle aches", "Fatigue", "Loss of appetite", "Dehydration"],
+        "warning_signs": ["Confusion", "Seizures (high fever)", "Temperature above 103°F / 39.4°C"],
+        "steps": [
+          "Rest in a cool, well-ventilated room.",
+          "Drink plenty of fluids: water, ORS, herbal teas (ginger / tulsi).",
+          "Use lukewarm sponging or compresses on forehead and armpits.",
+          "Wear light clothing — do NOT bundle up.",
+          "Seek medical help if fever exceeds 103°F or lasts more than 3 days."
+        ],
+        "medicines": [
+          {
+            "name": "Paracetamol (Crocin/Calpol)",
+            "dose": "500–1000 mg every 4–6 hrs (max 4g/day)",
+            "price_inr": 10,
+            "use": "Reduce fever and pain — safest option"
+          },
+          {
+            "name": "Ibuprofen (Brufen)",
+            "dose": "400 mg every 6–8 hrs (max 2400 mg/day)",
+            "price_inr": 15,
+            "use": "Fever and inflammation — avoid in children under 6 months"
+          }
+        ]
+      },
+
+      "nausea": {
+        "id": "nausea",
+        "label": "Nausea",
+        "steps": [
+          "Sip ORS, clear broths, or electrolyte drinks in small, frequent amounts.",
+          "Rest completely.",
+          "Eat bland foods (rice, toast, bananas) only once nausea settles.",
+          "Wash hands frequently to prevent spreading.",
+          "Avoid strong smells, spicy or fatty food."
+        ],
+        "medicines": [
+          {
+            "name": "Electral ORS",
+            "price_inr": 5,
+            "use": "Rehydration per sachet"
+          },
+          {
+            "name": "Domperidone (Motilium)",
+            "dose": "10 mg before meals",
+            "price_inr": 25,
+            "use": "Anti-nausea"
+          },
+          {
+            "name": "Loperamide (Eldoper/Imodium)",
+            "dose": "2 mg after loose stool (max 8 mg/day)",
+            "price_inr": 25,
+            "use": "Diarrhea — use briefly only"
+          }
+        ]
+      },
+
+      "suffocation": {
+        "id": "suffocation",
+        "label": "Suffocation / Claustrophobia",
+        "steps": [
+          "Move person to open, well-ventilated space immediately.",
+          "Open windows and use a fan to increase airflow.",
+          "Loosen tight clothing (collar, belt).",
+          "Practice 4-7-8 breathing: inhale 4s, hold 7s, exhale 8s.",
+          "Box breathing alternative: inhale 4s, hold 4s, exhale 4s.",
+          "Sip cold water slowly.",
+          "Distract with calm visualization or conversation.",
+          "Call 108 if breathing does not improve within minutes."
+        ],
+        "medicines": [
+          {
+            "name": "Crocin (Paracetamol)",
+            "dose": "500 mg",
+            "price_inr": 10,
+            "use": "If anxiety causes headache"
+          },
+          {
+            "name": "Lorazepam",
+            "dose": "0.25 mg",
+            "price_inr": 30,
+            "use": "Acute panic — PRESCRIPTION ONLY",
+            "warning": "Do not administer without medical advice"
+          }
+        ]
+      },
+
+      "anxiety": {
+        "id": "anxiety",
+        "label": "Anxiety / Panic",
+        "steps": [
+          "Move to a calm, quiet space.",
+          "Practice 4-7-8 breathing or box breathing.",
+          "Speak calmly and reassuringly to the person.",
+          "Ground technique: name 5 things you see, 4 you touch, 3 you hear.",
+          "Avoid caffeine and stimulants.",
+          "Do NOT leave the person alone during a panic attack."
+        ],
+        "medicines": [
+          {
+            "name": "Crocin",
+            "price_inr": 10,
+            "use": "If anxiety triggers headache"
+          },
+          {
+            "name": "Alprazolam",
+            "dose": "0.25 mg",
+            "price_inr": 20,
+            "use": "Acute anxiety — PRESCRIPTION ONLY"
+          }
+        ]
+      },
+
+      "vomiting": {
+        "id": "vomiting",
+        "label": "Vomiting",
+        "steps": [
+          "Sip ORS or ginger tea in small amounts — 1–2 tablespoons every 15 minutes.",
+          "Rest with head elevated.",
+          "Avoid solid food until vomiting settles.",
+          "Try acupressure: press P6 point on wrist (inner wrist, 3 fingers from crease).",
+          "Chew fennel seeds (saunf) to settle stomach.",
+          "Seek help if blood in vomit or vomiting lasts more than 24 hours."
+        ],
+        "medicines": [
+          {
+            "name": "Electral ORS",
+            "price_inr": 5,
+            "use": "Rehydration"
+          },
+          {
+            "name": "Ondansetron (Ondem)",
+            "dose": "4 mg",
+            "price_inr": 25,
+            "use": "Anti-vomiting"
+          },
+          {
+            "name": "Domperidone (Motilium)",
+            "dose": "10 mg",
+            "price_inr": 25,
+            "use": "Anti-nausea/vomiting"
+          },
+          {
+            "name": "Eldoper (Loperamide)",
+            "dose": "2 mg",
+            "price_inr": 20,
+            "use": "If diarrhea present — avoid if blood in stool"
+          }
+        ]
+      },
+
+      "severe_cold": {
+        "id": "severe_cold",
+        "label": "Severe Cold",
+        "steps": [
+          "Inhale steam with a bowl of hot water — add a few drops of eucalyptus oil.",
+          "Gargle with warm salt water (1 tsp salt in warm water) 2–3 times daily.",
+          "Drink hot turmeric milk (haldi doodh) before bed.",
+          "Apply honey-ginger mix for throat relief.",
+          "Stay well hydrated.",
+          "Elevate head while sleeping to ease congestion.",
+          "Rest in a warm room."
+        ],
+        "medicines": [
+          {
+            "name": "Cetirizine",
+            "dose": "10 mg at night",
+            "price_inr": 15,
+            "use": "Antihistamine for runny nose / sneezing"
+          },
+          {
+            "name": "Ascoril LS syrup",
+            "dose": "5 ml 3x/day",
+            "price_inr": 30,
+            "use": "Cough and congestion"
+          },
+          {
+            "name": "Sinarest tablet",
+            "price_inr": 20,
+            "use": "Cold / sinus relief"
+          },
+          {
+            "name": "Vicks VapoRub",
+            "price_inr": 40,
+            "use": "Topical chest rub for congestion"
+          }
+        ]
+      },
+
+      "headache": {
+        "id": "headache",
+        "label": "Headache",
+        "steps": [
+          "Apply cold compress to forehead for 10–15 minutes.",
+          "Drink at least 2 litres of water — dehydration is a common cause.",
+          "Massage temples gently in circular motion.",
+          "Rest in a dark, quiet room.",
+          "Apply peppermint oil to temples.",
+          "Sip black tea (caffeine can relieve tension headaches).",
+          "Try gentle neck stretches."
+        ],
+        "medicines": [
+          {
+            "name": "Paracetamol (Crocin/Dolo 650)",
+            "dose": "500–650 mg every 4–6 hrs",
+            "price_inr": 12,
+            "use": "Pain relief — first-line"
+          },
+          {
+            "name": "Saridon",
+            "price_inr": 20,
+            "use": "Headache-specific combination tablet"
+          },
+          {
+            "name": "Combiflam (Ibuprofen + Paracetamol)",
+            "price_inr": 15,
+            "use": "Pain and inflammation"
+          }
+        ]
+      },
+
+      "trauma": {
+        "id": "trauma",
+        "label": "Trauma / Injury / Shock",
+        "steps": [
+          "Stop bleeding with clean cloth — apply firm pressure.",
+          "If fracture suspected: immobilize the area; do not move.",
+          "Elevate injured limb if no spinal concern.",
+          "Treat for shock: lay person flat, elevate legs (if conscious and no spinal injury).",
+          "Apply RICE method: Rest, Ice (10–15 min), Compression bandage, Elevate.",
+          "Reassure the person calmly — shock worsens with panic.",
+          "Call 108 for serious trauma."
+        ],
+        "medicines": [
+          {
+            "name": "Paracetamol (Crocin)",
+            "dose": "500 mg every 6 hrs",
+            "price_inr": 10,
+            "use": "Pain relief"
+          },
+          {
+            "name": "Volini gel",
+            "price_inr": 50,
+            "use": "Apply topically 3x/day"
+          },
+          {
+            "name": "Betadine",
+            "price_inr": 30,
+            "use": "Wound antiseptic"
+          },
+          {
+            "name": "Diclofenac gel",
+            "price_inr": 30,
+            "use": "Topical anti-inflammatory"
+          }
+        ]
+      },
+
+      "allergy": {
+        "id": "allergy",
+        "label": "Allergic Reaction",
+        "steps": [
+          "Remove or move away from the allergen immediately.",
+          "Apply cool compress on rash or affected skin.",
+          "Take antihistamine immediately.",
+          "Avoid rubbing or scratching the affected area.",
+          "Apply cold oatmeal paste on rash for relief.",
+          "For severe reaction (throat swelling, difficulty breathing): CALL 108 IMMEDIATELY — this is anaphylaxis."
+        ],
+        "medicines": [
+          {
+            "name": "Cetirizine",
+            "dose": "10 mg",
+            "price_inr": 15,
+            "use": "Antihistamine — first-line for allergy"
+          },
+          {
+            "name": "Avil (Pheniramine)",
+            "price_inr": 25,
+            "use": "Antihistamine"
+          },
+          {
+            "name": "Fexofenadine (Allegra)",
+            "price_inr": 30,
+            "use": "Non-drowsy antihistamine"
+          },
+          {
+            "name": "Caladryl lotion",
+            "price_inr": 40,
+            "use": "Skin rash / itching relief"
+          },
+          {
+            "name": "Hydrocortisone cream",
+            "price_inr": 25,
+            "use": "Topical anti-inflammatory for skin allergy"
+          }
+        ]
+      },
+
+      "burn": {
+        "id": "burn",
+        "label": "Burns",
+        "steps": [
+          "Immediately cool burn under running lukewarm water for 20 minutes.",
+          "Do NOT use ice, butter, toothpaste, or oil — these worsen burns.",
+          "Cover loosely with a clean, non-fluffy cloth or sterile gauze.",
+          "Do not burst blisters.",
+          "Apply aloe vera gel (fresh leaf preferred) after cooling.",
+          "For large burns or burns on face/hands/genitals: CALL 108."
+        ],
+        "medicines": [
+          {
+            "name": "Silverex cream",
+            "price_inr": 50,
+            "use": "Antibacterial for burn wounds"
+          },
+          {
+            "name": "Burnol",
+            "price_inr": 30,
+            "use": "Antiseptic burn ointment"
+          },
+          {
+            "name": "Soframycin cream",
+            "price_inr": 25,
+            "use": "Antibiotic for infected burn area"
+          },
+          {
+            "name": "Paracetamol (Crocin)",
+            "dose": "500 mg every 6 hrs",
+            "price_inr": 10,
+            "use": "Pain relief"
+          }
+        ]
+      },
+
+      "carbon_monoxide": {
+        "id": "carbon_monoxide",
+        "label": "Carbon Monoxide Inhalation",
+        "priority": "CRITICAL",
+        "steps": [
+          "Move person to FRESH AIR IMMEDIATELY — outdoors or open windows.",
+          "Call 108 immediately.",
+          "If unconscious and not breathing: start CPR if trained.",
+          "Loosen clothing.",
+          "Do NOT go back into the contaminated area.",
+          "Keep person lying down and still.",
+          "Hyperventilate in fresh air if conscious.",
+          "Oxygen therapy is required — cannot be administered at home."
+        ],
+        "medicines": [
+          {
+            "name": "NO OTC medicines available for CO poisoning",
+            "note": "Pure oxygen is the only treatment — administered by emergency services only"
+          }
+        ],
+        "emergency_action": "CALL 108. Get to fresh air. Oxygen therapy required."
+      },
+
+      "high_bp": {
+        "id": "high_bp",
+        "label": "High Blood Pressure (Hypertension)",
+        "steps": [
+          "Sit or lie down quietly in a calm environment.",
+          "Take slow, deep breaths.",
+          "Avoid salt, caffeine, or any stimulants.",
+          "Loosen tight clothing.",
+          "Monitor BP if possible.",
+          "Do NOT exert — rest completely.",
+          "Seek medical care if BP remains very high or if symptoms include chest pain, vision changes, or severe headache."
+        ],
+        "medicines": [
+          {
+            "name": "Amlodipine (Amlokind 5 mg)",
+            "price_inr": 40,
+            "use": "Calcium channel blocker — DOCTOR-PRESCRIBED ONLY",
+            "warning": "Do not self-administer without prescription"
+          },
+          {
+            "name": "Telma 40 (Telmisartan)",
+            "price_inr": 45,
+            "use": "BP medication — DOCTOR-PRESCRIBED ONLY"
+          }
+        ]
+      },
+
+      "low_bp": {
+        "id": "low_bp",
+        "label": "Low Blood Pressure (Hypotension)",
+        "steps": [
+          "Lay person down flat and raise their legs above heart level.",
+          "Provide fluids: water, ORS, or salty snacks.",
+          "Avoid sudden standing.",
+          "Keep the person warm.",
+          "If unconscious due to low BP: CALL 108 immediately.",
+          "Monitor pulse regularly."
+        ],
+        "medicines": [
+          {
+            "name": "Electral ORS",
+            "price_inr": 5,
+            "use": "Rehydration and electrolyte replenishment"
+          },
+          {
+            "name": "Shelcal (Calcium supplement)",
+            "price_inr": 40,
+            "use": "If low calcium contributing to low BP"
+          }
+        ]
+      },
+
+      "diabetes": {
+        "id": "diabetes",
+        "label": "Diabetic Emergency (Hypoglycemia / Low Sugar)",
+        "steps": [
+          "If conscious: give glucose drink, Glucon-D, or sugar immediately.",
+          "Give candy, fruit juice, or glucose biscuits.",
+          "If unconscious: DO NOT give anything by mouth — CALL 108.",
+          "Monitor consciousness closely.",
+          "Check blood sugar if glucometer available.",
+          "Keep person lying down and calm.",
+          "Recheck sugar level after 15 minutes."
+        ],
+        "medicines": [
+          {
+            "name": "Glucon-D (Glucose powder)",
+            "price_inr": 20,
+            "use": "Immediate sugar boost for hypoglycemia"
+          },
+          {
+            "name": "GlucaGen injection",
+            "use": "For severe unconscious hypoglycemia — PRESCRIPTION / PROFESSIONAL ONLY"
+          }
+        ],
+        "emergency_action": "If unconscious: CALL 108. Do NOT give oral glucose."
+      }
+
+    }
+
+  },
+
+  "age_medicine_warnings": {
+    "infant": "No OTC medicines without paediatrician advice. Most adult medicines are contraindicated.",
+    "child": "Paediatric doses apply. Ibuprofen not for under 6 months. Always halve or quarter adult doses unless labelled for children.",
+    "elderly": "Reduce doses. Avoid NSAIDs (ibuprofen) if possible — risk of kidney/stomach issues. Monitor closely.",
+    "adult": "Standard doses apply as listed.",
+    "teen": "Use lower range of adult doses. Avoid aspirin for viral illnesses (Reye's syndrome risk)."
+  },
+
+  "gender_notes": {
+    "female": {
+      "note": "Heavy menstrual bleeding with dizziness may require urgent care — treat as moderate-to-heavy bleeding. Pregnancy: avoid ibuprofen, especially in 3rd trimester."
+    },
+    "male": {
+      "note": "No specific gender-based differences for listed conditions."
+    }
+  },
+
+  "emergency_numbers": {
+    "india_ambulance": "108",
+    "india_police": "100",
+    "india_disaster": "1078",
+    "note": "Call 108 for all critical/emergency conditions."
+  }
+}

@@ -8,6 +8,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.Arsenic.medbridge.database.TreatmentRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResultActivity extends AppCompatActivity {
 
     TextView priorityText, reasonText, treatmentText, warningText;
@@ -18,14 +23,14 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        // 🔹 Link UI
+        // 🔹 UI Binding
         priorityText = findViewById(R.id.priorityText);
         reasonText = findViewById(R.id.reasonText);
         treatmentText = findViewById(R.id.treatmentText);
         warningText = findViewById(R.id.warningText);
         syncBtn = findViewById(R.id.syncBtn);
 
-        // 🔹 Get Intent Data
+        // 🔹 Get Data
         Intent intent = getIntent();
 
         String name = intent.getStringExtra("name");
@@ -33,67 +38,138 @@ public class ResultActivity extends AppCompatActivity {
         String gender = intent.getStringExtra("gender");
         String date = intent.getStringExtra("date");
         String bleeding = intent.getStringExtra("bleeding");
-        String meds = intent.getStringExtra("meds");
+        String medsInput = intent.getStringExtra("meds");
 
         boolean conscious = intent.getBooleanExtra("conscious", true);
 
-        // 🔥 FIX: fracture comes as STRING
         String fractureStr = intent.getStringExtra("fracture");
         boolean fracture = fractureStr != null && !fractureStr.equalsIgnoreCase("None");
 
-        // 🔥 NULL SAFETY
+        // 🔒 Null safety
         if (name == null) name = "";
         if (gender == null) gender = "";
         if (date == null) date = "";
-        if (meds == null) meds = "";
+        if (medsInput == null) medsInput = "";
         if (bleeding == null) bleeding = "None";
 
-        // 🔥 SAFE AGE PARSING
         int age = 0;
         try {
             age = Integer.parseInt(ageStr);
-        } catch (Exception e) {
-            age = 0;
+        } catch (Exception ignored) {}
+
+        // 🧠 DATABASE
+        TreatmentRepository repo = new TreatmentRepository(this);
+
+        // 🧩 MULTI-CONDITION LOGIC
+        List<String> protocolList = new ArrayList<>();
+
+        // 🔴 Bleeding
+        if ("Severe".equalsIgnoreCase(bleeding)) {
+            protocolList.add("bleeding_heavy");
+        } else if ("Moderate".equalsIgnoreCase(bleeding)) {
+            protocolList.add("bleeding_moderate");
         }
 
-        // 🧠 TRIAGE LOGIC
-        String priority;
-        if ("Severe".equalsIgnoreCase(bleeding) || !conscious) {
+        // 🟠 Fracture
+        if (fracture) {
+            protocolList.add("condition_trauma");
+        }
+
+        // 🔵 Unconscious
+        if (!conscious) {
+            protocolList.add("bleeding_heavy"); // emergency reuse
+        }
+
+        // 🟢 Default
+        if (protocolList.isEmpty()) {
+            protocolList.add("condition_fever");
+        }
+
+        // 🧠 PRIORITY LOGIC
+        String priority = "P3";
+
+        if (protocolList.contains("bleeding_heavy") || !conscious) {
             priority = "P1";
-        } else if (fracture) {
+        } else if (protocolList.contains("bleeding_moderate") || fracture) {
             priority = "P2";
-        } else {
-            priority = "P3";
         }
 
         // 📊 REASON
-        String reason;
+        StringBuilder reasonBuilder = new StringBuilder();
+
         if ("Severe".equalsIgnoreCase(bleeding)) {
-            reason = "Severe bleeding detected";
-        } else if (!conscious) {
-            reason = "Patient unconscious";
-        } else {
-            reason = "Stable condition";
+            reasonBuilder.append("Severe bleeding detected\n");
+        }
+        if (!conscious) {
+            reasonBuilder.append("Patient unconscious\n");
+        }
+        if (fracture) {
+            reasonBuilder.append("Fracture suspected\n");
         }
 
-        // 💊 TREATMENT
-        String treatment;
-        if (priority.equals("P1")) {
-            treatment = "Immediate care: Stop bleeding, evacuate";
-        } else if (priority.equals("P2")) {
-            treatment = "Stabilize and monitor";
-        } else {
-            treatment = "Basic first aid";
+        if (reasonBuilder.length() == 0) {
+            reasonBuilder.append("Stable condition");
         }
 
-        // ⚠️ DRUG WARNING
+        // 🔄 MERGE DATA
+        StringBuilder stepsBuilder = new StringBuilder();
+        StringBuilder medsBuilder = new StringBuilder();
+
+        for (String id : protocolList) {
+
+            String steps = repo.getSteps(id);
+            String meds = repo.getMedications(id);
+
+            if (steps != null && !steps.isEmpty()) {
+                stepsBuilder.append("\n[").append(id.toUpperCase()).append("]\n");
+                stepsBuilder.append(steps).append("\n");
+            }
+
+            if (meds != null && !meds.isEmpty()) {
+                medsBuilder.append("\n[").append(id.toUpperCase()).append("]\n");
+                medsBuilder.append(meds).append("\n");
+            }
+        }
+
+        // ⚠️ DRUG INTERACTION
         String warning = "";
-        if (meds.toLowerCase().contains("aspirin") &&
-                meds.toLowerCase().contains("ibuprofen")) {
-            warning = "⚠️ Drug interaction detected";
+
+        if (medsInput.contains(",")) {
+            String[] drugs = medsInput.split(",");
+
+            if (drugs.length >= 2) {
+                String interaction = repo.checkInteraction(
+                        drugs[0].trim(),
+                        drugs[1].trim()
+                );
+
+                if (interaction != null) {
+                    warning = "⚠ " + interaction;
+                }
+            }
         }
 
-        // 💾 SAVE DATA (FINAL FIXED)
+        // 📺 DISPLAY
+        String finalOutput =
+                "Treatment Steps:\n" + stepsBuilder.toString() +
+                        "\nMedications:\n" + medsBuilder.toString();
+
+        treatmentText.setText(finalOutput);
+        reasonText.setText(reasonBuilder.toString());
+        warningText.setText(warning);
+
+        // 🎨 PRIORITY COLOR
+        priorityText.setText(priority);
+
+        if (priority.equals("P1")) {
+            priorityText.setTextColor(getResources().getColor(R.color.danger));
+        } else if (priority.equals("P2")) {
+            priorityText.setTextColor(getResources().getColor(R.color.warning));
+        } else {
+            priorityText.setTextColor(getResources().getColor(R.color.accent));
+        }
+
+        // 💾 SAVE PATIENT
         Patient patient = new Patient(
                 name,
                 gender,
@@ -106,28 +182,13 @@ public class ResultActivity extends AppCompatActivity {
 
         DataStore.patientList.add(patient);
 
-        // 🖥️ SET UI
-        priorityText.setText(priority);
-
-        if (priority.equals("P1")) {
-            priorityText.setTextColor(getResources().getColor(R.color.danger));
-        } else if (priority.equals("P2")) {
-            priorityText.setTextColor(getResources().getColor(R.color.warning));
-        } else {
-            priorityText.setTextColor(getResources().getColor(R.color.accent));
-        }
-
-        reasonText.setText(reason);
-        treatmentText.setText(treatment);
-        warningText.setText(warning);
-
         // 🚀 SYNC BUTTON
         syncBtn.setOnClickListener(v -> {
             Toast.makeText(this, "Data Synced Successfully", Toast.LENGTH_SHORT).show();
 
             Intent syncIntent = new Intent(ResultActivity.this, DashBoardActivity.class);
             startActivity(syncIntent);
-            finish(); // optional: close this screen
+            finish();
         });
     }
 }
