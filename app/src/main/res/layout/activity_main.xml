@@ -62,6 +62,25 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/radioBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:text="📡"
+                android:textSize="18sp"
+                android:layout_marginStart="10dp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#192841"/>
+
+            <TextView
+                android:id="@+id/radioStatus"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="12dp"
+                android:text="Radio Status: Idle"
+               />
+
         </LinearLayout>
 
         <!-- CONTENT -->
@@ -222,11 +241,12 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Diseases -->
+
                     <CheckBox
                         android:id="@+id/CurrentDisease"
-                        android:text="Current Disease"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:text="Current Disease" />
 
                     <EditText
                         android:id="@+id/CurrentDiseaseInput"
@@ -289,6 +309,14 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <Button
+                android:text="View Radio Logs"
+                android:onClick="openLogs"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary"/>
+
             <!-- 🚀 BUTTON -->
             <Button
                 android:id="@+id/analyzeBtn"
@@ -297,7 +325,7 @@
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:backgroundTint="@color/primary"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="15dp"
                 android:elevation="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"/>

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     EditText nameInput, ageInput, medInput, currentDiseaseName, previousDiseaseName;
     AutoCompleteTextView genderDropdown, fractureDropdown;
-
+    TextView radioStatus;
+    Button radioBtn;
     RadioGroup bleedingGroup;
     Switch consciousSwitch;
 
@@ -40,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        radioStatus = findViewById(R.id.radioStatus);
+        radioBtn = findViewById(R.id.radioBtn);
 
+        radioBtn.setOnClickListener(v -> simulateRadio());
         // 🔹 Initialize Views
         nameInput = findViewById(R.id.nameInput);
         ageInput = findViewById(R.id.ageInput);
@@ -152,6 +157,37 @@ public class MainActivity extends AppCompatActivity {
         });
 
         pressing_effect(analyzeBtn);
+    }
+    private void simulateRadio() {
+
+        // Step 1: Create message
+        String json = "{ \"priority\": \"P1\", \"msg\": \"Critical patient detected\" }";
+
+        // Step 2: Update UI
+        radioStatus.setText("📡 Connecting...");
+
+        // Step 3: Simulate delay
+        new android.os.Handler().postDelayed(() -> {
+
+            radioStatus.setText("📶 Transmitting...");
+
+            new android.os.Handler().postDelayed(() -> {
+
+                radioStatus.setText("✅ Sent via Long-Range Radio");
+
+                // Save log
+                DataStore.radioLogs.add(
+                        new RadioMessage(json, "SENT")
+                );
+
+                Toast.makeText(this, "Message Broadcasted 🚀", Toast.LENGTH_SHORT).show();
+
+            }, 2000);
+
+        }, 1500);
+    }
+    public void openLogs(View view) {
+        startActivity(new Intent(this, RadioLogsActivity.class));
     }
 
     // 🔹 Button press animation

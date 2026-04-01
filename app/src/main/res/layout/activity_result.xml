@@ -57,6 +57,14 @@
             android:padding="12dp"
             android:layout_marginTop="12dp" />
 
+        <TextView
+            android:id="@+id/autoStatus"
+            android:text="Auto Broadcast: Not triggered"
+            android:textColor="@color/primary"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <!-- 🚀 BUTTON -->
         <Button
             android:id="@+id/syncBtn"

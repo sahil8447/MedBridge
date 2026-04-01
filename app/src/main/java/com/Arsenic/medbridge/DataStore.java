@@ -4,4 +4,5 @@ import java.util.ArrayList;
 
 public class DataStore {
     public static ArrayList<Patient> patientList = new ArrayList<>();
+    public static ArrayList<RadioMessage> radioLogs = new ArrayList<>();
 }

@@ -45,6 +45,10 @@ public class ResultActivity extends AppCompatActivity {
         String fractureStr = intent.getStringExtra("fracture");
         boolean fracture = fractureStr != null && !fractureStr.equalsIgnoreCase("None");
 
+        TextView autoStatus = findViewById(R.id.autoStatus);
+
+
+
         // 🔒 Null safety
         if (name == null) name = "";
         if (gender == null) gender = "";
@@ -92,6 +96,13 @@ public class ResultActivity extends AppCompatActivity {
             priority = "P1";
         } else if (protocolList.contains("bleeding_moderate") || fracture) {
             priority = "P2";
+        }
+
+        if (priority.equals("P1")) {
+            autoStatus.setText("🚨 Auto Broadcast Triggered");
+            autoBroadcast();
+        } else {
+            autoStatus.setText("No emergency broadcast needed");
         }
 
         // 📊 REASON
@@ -193,4 +204,23 @@ public class ResultActivity extends AppCompatActivity {
             finish();
         });
     }
+
+    private void autoBroadcast() {
+
+        String json = "{ \"priority\": \"P1\", \"msg\": \"Critical patient - immediate evacuation required\" }";
+
+        Toast.makeText(this, "🚨 Auto Broadcasting Emergency...", Toast.LENGTH_SHORT).show();
+
+        // Simulate radio transmission
+        new android.os.Handler().postDelayed(() -> {
+
+            DataStore.radioLogs.add(
+                    new RadioMessage(json, "AUTO-SENT")
+            );
+
+            Toast.makeText(this, "📡 Emergency Broadcast Sent", Toast.LENGTH_LONG).show();
+
+        }, 2000);
+    }
+
 }

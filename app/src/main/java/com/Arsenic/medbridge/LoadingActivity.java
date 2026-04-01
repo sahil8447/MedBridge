@@ -29,13 +29,13 @@ public class LoadingActivity extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             statusText.setText("Analyzing patient data...");
             subText.setText("Running AI triage engine");
-        }, 15000);
+        }, 1000);
 
         // 👉 Step 3
         new Handler().postDelayed(() -> {
             statusText.setText("Generating treatment...");
             subText.setText("Preparing response");
-        }, 18000);
+        }, 1300);
 
         // 👉 Step 4 → Move to Result Screen
         new Handler().postDelayed(() -> {
@@ -48,6 +48,6 @@ public class LoadingActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
 
-        }, 25000);
+        }, 5000);
     }
 }
