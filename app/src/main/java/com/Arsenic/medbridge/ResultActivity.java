@@ -14,13 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultActivity extends AppCompatActivity {
-
+    String priority;
+    String reason;
+    String treatment;
+    String medication;
     TextView priorityText, reasonText, treatmentText, warningText;
     Button syncBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String mode = getIntent().getStringExtra("mode");
         setContentView(R.layout.activity_result);
 
         // 🔹 UI Binding
@@ -73,6 +77,17 @@ public class ResultActivity extends AppCompatActivity {
         } else if ("Moderate".equalsIgnoreCase(bleeding)) {
             protocolList.add("bleeding_moderate");
         }
+
+        if ("IMAGE".equals(mode)) {
+
+            // 🔥 IMAGE MODE (NO OTHER LOGIC SHOULD RUN)
+            priority = getIntent().getStringExtra("priority");
+            reason = getIntent().getStringExtra("reason");
+            treatment = getIntent().getStringExtra("treatment");
+            medication = getIntent().getStringExtra("medication");
+
+        }
+        
 
         // 🟠 Fracture
         if (fracture) {
